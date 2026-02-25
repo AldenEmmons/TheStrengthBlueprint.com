@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,7 +18,7 @@
       --grey: #ffffff;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    html { scroll-behavior: smooth; overflow-x: hidden; }
     body { font-family: 'DM Sans', sans-serif; background: var(--black); color: var(--white); overflow-x: hidden; }
 
     @keyframes fadeUp {
@@ -195,6 +196,8 @@
       .footer-brand p { max-width: 100%; }
       .footer-brand .social-links { justify-content: center; }
       .footer-bottom { flex-direction: column; gap: 10px; text-align: center; padding: 20px 24px; }
+      .stats-strip { flex-wrap: wrap; }
+      .stat-item { flex: 1 1 50%; }
     }
   </style>
 </head>

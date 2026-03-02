@@ -55,7 +55,9 @@
       padding: 0 48px; height: 72px;
       background: rgba(8,12,20,0.93); backdrop-filter: blur(16px);
       border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: transform 0.3s ease;
     }
+    header.nav-hidden { transform: translateY(-100%); }
     .logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.45rem; letter-spacing: 3px; color: var(--white); }
     .logo em { color: var(--gold); font-style: normal; }
     nav { display: flex; align-items: center; gap: 32px; }
@@ -425,6 +427,20 @@
       });
     }, { threshold: 0.12 });
     document.querySelectorAll('.reveal, .reveal-left').forEach(el => observer.observe(el));
+
+    (function () {
+      const header = document.querySelector('header');
+      let lastScrollY = window.scrollY;
+      window.addEventListener('scroll', function () {
+        const currentScrollY = window.scrollY;
+        if (currentScrollY > lastScrollY && currentScrollY > 80) {
+          header.classList.add('nav-hidden');
+        } else {
+          header.classList.remove('nav-hidden');
+        }
+        lastScrollY = currentScrollY;
+      }, { passive: true });
+    })();
   </script>
 
 </body>

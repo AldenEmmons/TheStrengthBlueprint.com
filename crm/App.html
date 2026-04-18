@@ -616,6 +616,7 @@
     renderBoard(allLeads);
     google.script.run
       .withSuccessHandler(function(updated) {
+        // update local copy
         var idx = allLeads.findIndex(function(l) { return l.lead_id === leadId; });
         if (idx >= 0) allLeads[idx] = updated;
         showToast('Moved to ' + newStage);
@@ -685,6 +686,7 @@
     var name = ((lead.first_name || '') + ' ' + (lead.last_name || '')).trim() || 'Unknown';
     document.getElementById('panelName').textContent = name;
 
+    // Stage selector
     var stageEl = document.getElementById('panelStage');
     stageEl.innerHTML = STAGES.map(function(s) {
       return '<option value="' + s + '"' + (lead.stage === s ? ' selected' : '') + '>' + s + '</option>';

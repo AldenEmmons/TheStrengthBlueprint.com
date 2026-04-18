@@ -13,33 +13,28 @@ function doGet(e) {
     return ContentService.createTextOutput('Forbidden').setResponseCode(403);
   }
 
-  // Auth check
-  var email = Session.getActiveUser().getEmail();
-  if (!isAuthorized(email)) {
-    return HtmlService.createHtmlOutputFromFile('Unauthorized')
-      .setTitle('Access Denied — TSB CRM')
-      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.DENY);
-  }
-
-  // Serve app with user info injected
+  // Serve app (deployed as "Execute as: Me" — access controlled by URL)
+  var email = 'alden';
   var template = HtmlService.createTemplateFromFile('App');
   template.userEmail = email;
-  template.userName = email.split('@')[0];
+  template.userName = email;
   return template.evaluate()
     .setTitle('TSB CRM')
-    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.DENY);
+    .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.DEFAULT);
 }
 
 function doPost(e) {
   try {
     var body = JSON.parse(e.postData.contents);
 
-    // Detect Zapier flat payload vs native Facebook webhook payload
     if (body.object === 'page') {
       // Native Facebook webhook
       processLeadEvent(body);
+    } else if (body.source === 'stripe' || body.payment_id !== undefined || body.checkout_session_id !== undefined) {
+      // Stripe payment via Zapier
+      processPaymentWebhook(body);
     } else if (body.first_name !== undefined || body.email !== undefined) {
-      // Zapier fallback — flat JSON
+      // Zapier Facebook Lead Ad fallback — flat JSON
       processZapierPayload(body);
     } else {
       Logger.log('doPost: unrecognized payload format');
@@ -79,4 +74,21 @@ function isAuthorized(email) {
 function getOverdueCount() {
   var overdue = getOverdueLeads();
   return overdue.length;
+}
+
+/**
+ * Test function — run this to verify the SPREADSHEET_ID is correct.
+ * Check the Execution log after running.
+ */
+function testSheetId() {
+  var id = PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID');
+  Logger.log('ID is: [' + id + ']');
+  var sheet = SpreadsheetApp.openById(id);
+  Logger.log('Sheet name: ' + sheet.getName());
+}
+
+function testGetAllLeads() {
+  var leads = getAllLeads();
+  Logger.log('Count: ' + leads.length);
+  Logger.log(JSON.stringify(leads));
 }

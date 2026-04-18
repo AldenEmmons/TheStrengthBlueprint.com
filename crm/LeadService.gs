@@ -125,6 +125,16 @@ function searchLeads(query) {
   });
 }
 
+function findLeadByEmail(email) {
+  if (!email) return null;
+  var normalized = email.toLowerCase().trim();
+  var leads = getAllLeads();
+  for (var i = 0; i < leads.length; i++) {
+    if ((leads[i].email || '').toLowerCase().trim() === normalized) return leads[i];
+  }
+  return null;
+}
+
 function findLeadByFbLeadId(fbLeadId) {
   var sheet = getSheet(LEADS_SHEET);
   var colIndex = getColIndex(sheet, 'fb_lead_id');

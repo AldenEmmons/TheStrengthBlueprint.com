@@ -30,6 +30,8 @@
       to { opacity: 1; }
     }
     @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    @keyframes popIn { 0% { opacity:0; transform:scale(0.85) translateY(10px); } 70% { transform:scale(1.04) translateY(-2px); } 100% { opacity:1; transform:scale(1) translateY(0); } }
+    .anim-pop-in { opacity:0; animation: popIn 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards; }
 
     .anim-fade-up { opacity: 0; animation: fadeUp 0.8s ease forwards; }
     .anim-fade-in { opacity: 0; animation: fadeIn 1s ease forwards; }
@@ -37,6 +39,7 @@
     .delay-2 { animation-delay: 0.35s; }
     .delay-3 { animation-delay: 0.55s; }
     .delay-4 { animation-delay: 0.75s; }
+    .delay-5 { animation-delay: 1s; }
 
     .reveal {
       opacity: 0; transform: translateY(30px);
@@ -246,6 +249,7 @@
         <div class="hero-btns">
           <a href="https://TheStrengthBlueprint.as.me/" target="_blank" class="btn-solid">Book Free Assessment</a>
           <a href="#method" class="btn-outline">See The Method</a>
+          <a href="https://buy.stripe.com/fZuaEPdQ92WG7mkaPPgnK00" target="_blank" class="btn-solid anim-pop-in delay-5" style="background:transparent;color:var(--gold);border:1.5px solid var(--gold);">Start Today</a>
         </div>
       </div>
     </div>
@@ -372,7 +376,7 @@
       <p class="reveal">We'll run a full movement screen, identify your fear avoidance patterns, and show you exactly what's keeping you stuck, and what it'll take to fix it. No pressure. No pitch. Just clarity.</p>
       <a href="https://TheStrengthBlueprint.as.me/" target="_blank" class="btn-solid reveal">Book Free Movement Assessment</a>
       <p class="reveal" style="margin-top:28px;font-size:0.8rem;color:rgba(255,255,255,0.35);letter-spacing:1px;text-transform:uppercase;">Already assessed &amp; ready to start?</p>
-      <a href="https://buy.stripe.com/fZuaEPdQ92WG7mkaPPgnK00" target="_blank" class="btn-outline reveal" style="margin-top:10px;">Enroll Now</a>
+      <a href="https://buy.stripe.com/fZuaEPdQ92WG7mkaPPgnK00" target="_blank" class="btn-outline reveal" style="margin-top:10px;">Start Today</a>
     </div>
   </section>
 

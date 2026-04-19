@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark">
+<title>We fix the root cause. Not just the symptom.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!--[if mso]>
+<style>
+  .fallback-font { font-family: Arial, sans-serif !important; }
+  .fallback-display { font-family: 'Arial Black', Arial, sans-serif !important; letter-spacing: 0 !important; }
+</style>
+<![endif]-->
+<style>
+  body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+  table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+  img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; display: block; }
+  body { margin: 0 !important; padding: 0 !important; width: 100% !important; }
+  a { color: #C9A24A; }
+
+  /* ── Button hover animations ── */
+  a.sp-cta, a.sp-nav-btn {
+    transition: background 0.2s ease, color 0.2s ease, letter-spacing 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease !important;
+  }
+  a.sp-cta:hover {
+    background: #e0b85a !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 24px rgba(201,162,74,0.35) !important;
+    letter-spacing: 0.28em !important;
+  }
+  a.sp-nav-btn:hover {
+    background: #e0b85a !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 14px rgba(201,162,74,0.3) !important;
+  }
+
+  /* ── Phase card hover ── */
+  .phase-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+  }
+  .phase-card:hover {
+    transform: translateX(4px) !important;
+    box-shadow: -4px 0 0 0 #e0b85a !important;
+  }
+
+  /* ── Scroll reveal base state ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-left {
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+  }
+  .reveal-left.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  /* staggered children */
+  .reveal:nth-child(2) { transition-delay: 0.1s; }
+  .reveal:nth-child(3) { transition-delay: 0.2s; }
+
+  @media only screen and (max-width: 600px) {
+    .sp-container { width: 100% !important; }
+    .sp-px { padding-left: 22px !important; padding-right: 22px !important; }
+    .sp-hero-pad { padding: 44px 22px 40px !important; }
+    .sp-h1 { font-size: 42px !important; line-height: 0.95 !important; }
+    .sp-h2 { font-size: 32px !important; line-height: 0.98 !important; }
+    .sp-eyebrow { font-size: 11px !important; }
+    .sp-phase-title { font-size: 17px !important; }
+    .sp-phase-num { font-size: 56px !important; padding-bottom: 6px !important; }
+    .sp-phase-row { display: block !important; width: 100% !important; }
+    .sp-phase-num-cell { padding-right: 0 !important; padding-bottom: 4px !important; }
+    .sp-cta { font-size: 14px !important; padding: 20px 28px !important; letter-spacing: 0.18em !important; }
+    .sp-wordmark { font-size: 17px !important; letter-spacing: 0.12em !important; }
+    .sp-nav-btn { font-size: 10px !important; padding: 8px 12px !important; }
+    .sp-cream-pad { padding: 48px 22px 36px !important; }
+    .sp-signoff-pad { padding: 40px 22px 44px !important; }
+    .sp-quote { font-size: 20px !important; line-height: 1.3 !important; }
+    .sp-stat-block { display: block !important; width: 100% !important; text-align: center !important; padding: 12px 0 !important; }
+    .sp-stat-divider { display: none !important; }
+  }
+</style>
+</head>
+<body style="margin:0;padding:0;background:#070a10;font-family:'Inter',Arial,Helvetica,sans-serif;">
+
+<!-- Preheader -->
+<div style="display:none;overflow:hidden;line-height:1px;opacity:0;max-height:0;max-width:0;color:transparent;">
+  You've done the physio. You've tried the YouTube programs. You've rested it. Here's what's different. &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;
+</div>
+
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#070a10" style="background:#070a10;">
+  <tr>
+    <td align="center" style="padding:0;">
+
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" class="sp-container" style="width:600px;max-width:600px;background:#0B0F1A;">
+
+        <!-- NAV BAR -->
+        <tr>
+          <td bgcolor="#0B0F1A" style="background:#0B0F1A;padding:0;border-bottom:1px solid #1a2030;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+              <tr>
+                <td class="sp-px" align="left" valign="middle" style="padding:18px 32px;">
+                  <img src="https://thestrengthblueprint.com/email/assets/tsb-logo.png" alt="The Strength Blueprint" width="72" style="display:block;width:72px;height:auto;border:0;filter:brightness(0) invert(1);">
+                </td>
+                <td align="right" valign="middle" style="padding:14px 32px 14px 0;">
+                  <a href="https://thestrengthblueprint.com/assessment" class="sp-nav-btn fallback-font" style="display:inline-block;padding:10px 16px;background:#C9A24A;color:#0B0F1A;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:0.2em;text-decoration:none;text-transform:uppercase;">
+                    Free&nbsp;Assessment
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- HERO COPY -->
+        <tr class="reveal">
+          <td class="sp-hero-pad sp-px" bgcolor="#0B0F1A" style="padding:52px 40px 40px;background:#0B0F1A;" align="left">
+            <p class="sp-eyebrow fallback-font" style="margin:0 0 20px;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:12px;letter-spacing:0.28em;color:#C9A24A;text-transform:uppercase;font-weight:600;">
+              Welcome, {{client_name}} &nbsp;/&nbsp; File&nbsp;Opened
+            </p>
+
+            <h1 class="sp-h1 fallback-display" style="margin:0 0 24px;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-weight:700;font-size:54px;line-height:0.96;letter-spacing:0.005em;color:#FFFFFF;text-transform:uppercase;">
+              We fix the root cause.<br>
+              <span style="color:#C9A24A;">Not just the symptom.</span>
+            </h1>
+
+            <p class="fallback-font" style="margin:0 0 14px;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:16px;line-height:1.65;color:#B8BDC7;">
+              You've done the physio. You've tried the YouTube programs. You've rested it. The problem isn't effort — nobody has addressed the actual mechanism keeping you stuck.
+            </p>
+            <p class="fallback-font" style="margin:0;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:16px;line-height:1.65;color:#B8BDC7;">
+              That changes today. Your plan is being built — grounded in 40+ systematic reviews, not guesswork.
+            </p>
+          </td>
+        </tr>
+
+        <!-- CREDENTIAL BAR -->
+        <tr class="reveal">
+          <td bgcolor="#0B0F1A" style="padding:0 40px 24px;background:#0B0F1A;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="border-top:1px solid #1a2030;border-bottom:1px solid #1a2030;">
+              <tr>
+                <td class="sp-stat-block" align="center" style="padding:20px 0;border-right:1px solid #1a2030;">
+                  <p class="fallback-display" style="margin:0 0 4px;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:28px;font-weight:700;color:#C9A24A;letter-spacing:0.02em;">40+</p>
+                  <p class="fallback-font" style="margin:0;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:11px;color:#6a6e78;letter-spacing:0.1em;text-transform:uppercase;">Systematic Reviews</p>
+                </td>
+                <td class="sp-stat-divider" width="1" style="background:#1a2030;width:1px;">&nbsp;</td>
+                <td class="sp-stat-block" align="center" style="padding:20px 0;border-right:1px solid #1a2030;">
+                  <p class="fallback-display" style="margin:0 0 4px;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:28px;font-weight:700;color:#C9A24A;letter-spacing:0.02em;">3</p>
+                  <p class="fallback-font" style="margin:0;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:11px;color:#6a6e78;letter-spacing:0.1em;text-transform:uppercase;">Phase System</p>
+                </td>
+                <td class="sp-stat-divider" width="1" style="background:#1a2030;width:1px;">&nbsp;</td>
+                <td class="sp-stat-block" align="center" style="padding:20px 0;">
+                  <p class="fallback-display" style="margin:0 0 4px;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:28px;font-weight:700;color:#C9A24A;letter-spacing:0.02em;">0</p>
+                  <p class="fallback-font" style="margin:0;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:11px;color:#6a6e78;letter-spacing:0.1em;text-transform:uppercase;">Generic Programs</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- INLINE CTA -->
+        <tr>
+          <td bgcolor="#0B0F1A" style="padding:8px 40px 56px;background:#0B0F1A;" align="left">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+              <tr>
+                <td style="border:1.5px solid #C9A24A;">
+                  <a href="https://thestrengthblueprint.com/program" class="sp-cta fallback-font" style="display:inline-block;padding:16px 32px;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:13px;font-weight:700;letter-spacing:0.22em;color:#C9A24A;text-decoration:none;text-transform:uppercase;">
+                    View&nbsp;Your&nbsp;Program&nbsp;&nbsp;→
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- CREAM METHOD PANEL -->
+        <tr class="reveal">
+          <td class="sp-cream-pad sp-px" bgcolor="#F2ECDF" style="padding:64px 40px 24px;background:#F2ECDF;" align="left">
+            <p class="sp-eyebrow fallback-font" style="margin:0 0 20px;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:12px;letter-spacing:0.3em;color:#C9A24A;text-transform:uppercase;font-weight:600;">
+              The&nbsp;3-Phase&nbsp;Method
+            </p>
+
+            <h2 class="sp-h2 fallback-display" style="margin:0 0 22px;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-weight:700;font-size:44px;line-height:0.98;letter-spacing:0.005em;color:#0B0F1A;text-transform:uppercase;">
+              Here's exactly what you're walking into.
+            </h2>
+
+            <p class="fallback-font" style="margin:0 0 40px;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:16px;line-height:1.65;color:#3a3e48;">
+              Consistency matters more than exercise type. But neither works if you're training dysfunction. Our method follows the clinical evidence — proximal stability first, motor control before load, graded exposure to feared movements, and progressive overload your body is actually ready for.
+            </p>
+          </td>
+        </tr>
+
+        <!-- PHASE 01 -->
+        <tr class="reveal-left">
+          <td class="sp-px" bgcolor="#F2ECDF" style="padding:0 40px 14px;background:#F2ECDF;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF" class="phase-card" style="background:#FFFFFF;border-left:3px solid #C9A24A;">
+              <tr>
+                <td style="padding:26px 28px 26px 26px;">
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                    <tr class="sp-phase-row">
+                      <td class="sp-phase-num-cell" width="90" valign="top" style="width:90px;padding-right:20px;">
+                        <p class="sp-phase-num fallback-display" style="margin:0;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:66px;line-height:0.85;color:#C9A24A;font-weight:600;letter-spacing:-0.02em;">01</p>
+                      </td>
+                      <td valign="top">
+                        <p class="sp-phase-title fallback-display" style="margin:0 0 10px;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:19px;line-height:1.15;color:#0B0F1A;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;">
+                          Foundation. Calm, educate &amp; stabilize.
+                        </p>
+                        <p class="fallback-font" style="margin:0 0 12px;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:14.5px;line-height:1.6;color:#3a3e48;">
+                          Pain Neuroscience Education (100–200 min over weeks), isometrics for the affected area to reduce cortical inhibition, and proximal stability work — core out. We let inflammation settle while building capacity. Not atrophying.
+                        </p>
+                        <p class="fallback-font" style="margin:0;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:11px;line-height:1.4;color:#8a6d2a;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">
+                          Isometrics &nbsp;·&nbsp; Motor&nbsp;Control &nbsp;·&nbsp; PNE
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- PHASE 02 -->
+        <tr class="reveal-left">
+          <td class="sp-px" bgcolor="#F2ECDF" style="padding:0 40px 14px;background:#F2ECDF;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF" class="phase-card" style="background:#FFFFFF;border-left:3px solid #C9A24A;">
+              <tr>
+                <td style="padding:26px 28px 26px 26px;">
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                    <tr class="sp-phase-row">
+                      <td class="sp-phase-num-cell" width="90" valign="top" style="width:90px;padding-right:20px;">
+                        <p class="sp-phase-num fallback-display" style="margin:0;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:66px;line-height:0.85;color:#C9A24A;font-weight:600;letter-spacing:-0.02em;">02</p>
+                      </td>
+                      <td valign="top">
+                        <p class="sp-phase-title fallback-display" style="margin:0 0 10px;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:19px;line-height:1.15;color:#0B0F1A;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;">
+                          Strengthen. Load with purpose.
+                        </p>
+                        <p class="fallback-font" style="margin:0 0 12px;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:14.5px;line-height:1.6;color:#3a3e48;">
+                          Progressive loading. Bilateral to unilateral. Partial to full ROM. Pain up to <strong style="color:#0B0F1A;">3–5/10</strong> during training is acceptable — if it returns to baseline within 24 hours. That line is the rule, not a suggestion.
+                        </p>
+                        <p class="fallback-font" style="margin:0;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:11px;line-height:1.4;color:#8a6d2a;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">
+                          Graded&nbsp;Exposure &nbsp;·&nbsp; Tempo &nbsp;·&nbsp; Capacity
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- PHASE 03 -->
+        <tr class="reveal-left">
+          <td class="sp-px" bgcolor="#F2ECDF" style="padding:0 40px 56px;background:#F2ECDF;">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#FFFFFF" class="phase-card" style="background:#FFFFFF;border-left:3px solid #C9A24A;">
+              <tr>
+                <td style="padding:26px 28px 26px 26px;">
+                  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
+                    <tr class="sp-phase-row">
+                      <td class="sp-phase-num-cell" width="90" valign="top" style="width:90px;padding-right:20px;">
+                        <p class="sp-phase-num fallback-display" style="margin:0;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:66px;line-height:0.85;color:#C9A24A;font-weight:600;letter-spacing:-0.02em;">03</p>
+                      </td>
+                      <td valign="top">
+                        <p class="sp-phase-title fallback-display" style="margin:0 0 10px;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:19px;line-height:1.15;color:#0B0F1A;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;">
+                          Perform. Train like the athlete you are.
+                        </p>
+                        <p class="fallback-font" style="margin:0 0 12px;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:14.5px;line-height:1.6;color:#3a3e48;">
+                          Goal-driven programming with objective progression criteria. Deadlift the kid. Run the 10K. Return to the sport. You graduate when the numbers say you graduate — not when you feel like it.
+                        </p>
+                        <p class="fallback-font" style="margin:0;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:11px;line-height:1.4;color:#8a6d2a;letter-spacing:0.18em;text-transform:uppercase;font-weight:600;">
+                          Sport-Specific &nbsp;·&nbsp; Testing &nbsp;·&nbsp; Retained&nbsp;Capacity
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- MID LOGO MARK -->
+        <tr>
+          <td bgcolor="#0B0F1A" style="padding:40px 40px;background:#0B0F1A;" align="center">
+            <img src="https://thestrengthblueprint.com/email/assets/mid.jpg" alt="The Strength Blueprint" width="120" style="display:block;width:120px;height:auto;border:0;margin:0 auto;">
+          </td>
+        </tr>
+
+        <!-- PULL QUOTE -->
+        <tr class="reveal">
+          <td class="sp-px" bgcolor="#0B0F1A" style="padding:56px 40px 48px;background:#0B0F1A;border-bottom:1px solid #1a2030;" align="left">
+            <p class="sp-eyebrow fallback-font" style="margin:0 0 20px;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:12px;letter-spacing:0.3em;color:#C9A24A;text-transform:uppercase;font-weight:600;">
+              A&nbsp;Note&nbsp;Before&nbsp;You&nbsp;Start
+            </p>
+            <p class="sp-quote fallback-display" style="margin:0 0 24px;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:24px;line-height:1.28;color:#FFFFFF;font-weight:500;letter-spacing:0.005em;">
+              &ldquo;This won't be easy. I'm not going to pretend it is. What I can tell you — the framework in front of you is the same one we use with clients who walked in unable to sit through a workday, and walked out deadlifting twice their bodyweight.&rdquo;
+            </p>
+            <p class="fallback-font" style="margin:0;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:13px;line-height:1.6;color:#8a8e98;">
+              Trust the order. Don't skip the Foundation work because it looks too simple — that's the phase doing the heaviest lifting. I'll see you in there.
+            </p>
+          </td>
+        </tr>
+
+        <!-- FINAL CTA -->
+        <tr class="reveal">
+          <td bgcolor="#0B0F1A" style="padding:64px 40px 24px;background:#0B0F1A;" align="center">
+            <p class="fallback-font" style="margin:0 0 16px;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:12px;letter-spacing:0.3em;color:#C9A24A;text-transform:uppercase;font-weight:600;text-align:center;">
+              Your&nbsp;Next&nbsp;Step
+            </p>
+            <p class="fallback-display" style="margin:0 0 32px;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:36px;line-height:1.02;color:#FFFFFF;font-weight:700;text-align:center;text-transform:uppercase;letter-spacing:0.005em;">
+              Your plan is ready.<br>
+              <span style="color:#C9A24A;">Let's get to work.</span>
+            </p>
+          </td>
+        </tr>
+
+        <tr>
+          <td bgcolor="#0B0F1A" style="padding:0 40px 20px;background:#0B0F1A;" align="center">
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center">
+              <tr>
+                <td align="center" bgcolor="#C9A24A" style="background:#C9A24A;">
+                  <a href="https://thestrengthblueprint.com/program" class="sp-cta fallback-font" style="display:inline-block;padding:22px 52px;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:15px;font-weight:700;letter-spacing:0.24em;color:#0B0F1A;text-decoration:none;text-transform:uppercase;">
+                    View&nbsp;Your&nbsp;Program
+                  </a>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <tr>
+          <td bgcolor="#0B0F1A" style="padding:0 40px 64px;background:#0B0F1A;" align="center">
+            <p class="fallback-font" style="margin:0;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:12px;line-height:1.5;color:#6a6e78;text-align:center;">
+              First session unlocks within 24 hours of plan build-out.
+            </p>
+          </td>
+        </tr>
+
+        <!-- SIGN-OFF -->
+        <tr>
+          <td class="sp-signoff-pad sp-px" bgcolor="#0B0F1A" style="padding:52px 40px 56px;background:#0B0F1A;border-top:1px solid #1a2030;">
+            <p class="fallback-font" style="margin:0 0 8px;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:11px;letter-spacing:0.28em;color:#6a6e78;text-transform:uppercase;font-weight:600;">
+              Signed
+            </p>
+            <p class="fallback-display" style="margin:0 0 4px;font-family:'Oswald','Arial Narrow',Arial,sans-serif;font-size:26px;line-height:1;color:#FFFFFF;font-weight:600;letter-spacing:0.02em;text-transform:uppercase;">
+              — Alden
+            </p>
+            <p class="fallback-font" style="margin:0;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:12px;line-height:1.5;color:#8a8e98;letter-spacing:0.06em;text-transform:uppercase;">
+              Head&nbsp;of&nbsp;Programming &nbsp;·&nbsp; The&nbsp;Strength&nbsp;Blueprint
+            </p>
+          </td>
+        </tr>
+
+        <!-- FOOTER -->
+        <tr>
+          <td bgcolor="#070a10" style="padding:40px 40px 44px;background:#070a10;border-top:1px solid #1a2030;" align="center">
+            <img src="https://thestrengthblueprint.com/email/assets/tsb-logo.png" alt="The Strength Blueprint" width="64" style="display:block;width:64px;height:auto;border:0;margin:0 auto 16px;filter:brightness(0) invert(1);opacity:0.7;">
+            <p class="fallback-font" style="margin:0 0 20px;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#6a6e78;text-align:center;max-width:380px;">
+              Evidence-based online strength coaching. Pain-free performance built on 40+ systematic reviews, not guesswork.
+            </p>
+
+            <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 20px;">
+              <tr><td bgcolor="#C9A24A" style="width:40px;height:1px;background:#C9A24A;line-height:1px;font-size:1px;">&nbsp;</td></tr>
+            </table>
+
+            <p class="fallback-font" style="margin:0 0 10px;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:11px;line-height:1.5;color:#55585E;text-align:center;">
+              You received this because you enrolled in the programming system at thestrengthblueprint.com.
+            </p>
+            <p class="fallback-font" style="margin:0;font-family:'Inter',Arial,Helvetica,sans-serif;font-size:11px;line-height:1.5;color:#55585E;text-align:center;">
+              <a href="#" style="color:#8a8e98;text-decoration:underline;">Manage preferences</a> &nbsp;·&nbsp; <a href="#" style="color:#8a8e98;text-decoration:underline;">Unsubscribe</a>
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal, .reveal-left').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

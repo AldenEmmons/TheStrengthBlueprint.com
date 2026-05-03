@@ -102,6 +102,11 @@
     .btn-solid:hover { background: var(--gold2); transform: translateY(-2px); }
     .btn-outline { padding: 15px 36px; background: transparent; color: var(--white); font-weight: 700; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 2px; border-radius: 3px; text-decoration: none; border: 1px solid rgba(255,255,255,0.25); transition: all 0.2s; display: inline-block; }
     .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.05); }
+    .btn-cta-primary { position: relative; overflow: hidden; transition: background 0.2s, transform 0.2s, box-shadow 0.2s, letter-spacing 0.2s; }
+    .btn-cta-primary::after { content: ''; position: absolute; inset: 0; background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.18) 50%, transparent 100%); transform: translateX(-100%); transition: transform 0.45s ease; }
+    .btn-cta-primary:hover { background: var(--gold2); transform: translateY(-3px); box-shadow: 0 12px 32px rgba(201,168,76,0.45); letter-spacing: 3px; }
+    .btn-cta-primary:hover::after { transform: translateX(100%); }
+    .btn-cta-primary:active { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(201,168,76,0.3); }
 
     .stats-strip { display: flex; justify-content: center; background: var(--mid); border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); }
     .stat-item { flex: 1; text-align: center; padding: 40px 20px; border-right: 1px solid rgba(255,255,255,0.06); }
@@ -377,7 +382,7 @@
       <div class="section-label reveal">Get Started</div>
       <h2 class="section-title reveal">Your First Step<br>Is Free.</h2>
       <p class="reveal">We'll run a full assessment, identify where your capacity gaps are, and show you exactly what phase of programming you need — and what it'll take to build from there. No pressure. No pitch. Just clarity.</p>
-      <a href="https://TheStrengthBlueprint.as.me/" target="_blank" class="btn-solid reveal">Book Free Movement Assessment</a>
+      <a href="https://TheStrengthBlueprint.as.me/" target="_blank" class="btn-solid reveal btn-cta-primary">Book Free Movement Assessment</a>
     </div>
   </section>
 

@@ -210,6 +210,112 @@
       .stats-strip { flex-wrap: wrap; }
       .stat-item { flex: 1 1 50%; }
     }
+
+    /* ── Lead Capture Modal ────────────────────────────── */
+    .lm-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.78);
+      z-index: 900;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .lm-overlay.open { display: flex; }
+    .lm-modal {
+      background: #111;
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 8px;
+      width: 100%;
+      max-width: 460px;
+      padding: 44px 40px 36px;
+      position: relative;
+      color: #fff;
+    }
+    .lm-close {
+      position: absolute;
+      top: 16px; right: 18px;
+      background: none;
+      border: none;
+      color: #666;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 6px 10px;
+      line-height: 1;
+    }
+    .lm-close:hover { color: #fff; }
+    .lm-eyebrow {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .lm-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.4rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      line-height: 1.1;
+      margin-bottom: 28px;
+    }
+    .lm-field { margin-bottom: 16px; }
+    .lm-field label {
+      display: block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 6px;
+    }
+    .lm-field input,
+    .lm-field textarea {
+      width: 100%;
+      padding: 12px 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 4px;
+      color: #fff;
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .lm-field input::placeholder,
+    .lm-field textarea::placeholder { color: rgba(255,255,255,0.28); }
+    .lm-field input:focus,
+    .lm-field textarea:focus { border-color: var(--gold); }
+    .lm-field textarea { resize: vertical; min-height: 80px; }
+    .lm-submit {
+      width: 100%;
+      padding: 15px;
+      background: var(--gold);
+      color: var(--black);
+      border: none;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 8px;
+    }
+    .lm-submit:hover { background: var(--gold2); }
+    .lm-submit:disabled { opacity: 0.55; cursor: default; }
+    .lm-success { display: none; text-align: center; padding: 16px 0; }
+    .lm-success h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.2rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+    .lm-success p { color: rgba(255,255,255,0.72); line-height: 1.75; font-size: 0.95rem; }
   </style>
 </head>
 <body>
@@ -220,7 +326,7 @@
       <a href="#method">The Method</a>
       <a href="#for">Who It's For</a>
       <a href="#science">The Science</a>
-      <a href="https://TheStrengthBlueprint.as.me/" target="_blank" class="header-cta">Free Assessment</a>
+      <a href="https://TheStrengthBlueprint.as.me/consultationcall20consultationcall20" target="_blank" class="header-cta">Free Assessment</a>
     </nav>
   </header>
 
@@ -254,7 +360,7 @@
       <div class="hero-sub anim-fade-in delay-4">
         <p>Most coaches tell you to rest it, work around it, or just live with it. We built a methodology from 40+ systematic reviews to address the full picture — and build the capacity to perform at your highest level.</p>
         <div class="hero-btns">
-          <a href="https://TheStrengthBlueprint.as.me/" target="_blank" class="btn-solid">Book Free Assessment</a>
+          <button onclick="openLeadForm()" class="btn-solid" style="border:none;cursor:pointer;">Book Free Assessment</button>
         </div>
         <a href="#method" class="anim-fade-in delay-5" style="display:inline-flex;align-items:center;gap:8px;margin-top:22px;font-size:0.75rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.35);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='rgba(255,255,255,0.7)'" onmouseout="this.style.color='rgba(255,255,255,0.35)'">
           Explore the method &nbsp;↓
@@ -382,7 +488,7 @@
       <div class="section-label reveal">Get Started</div>
       <h2 class="section-title reveal">Your First Step<br>Is Free.</h2>
       <p class="reveal">We'll run a full assessment, identify where your capacity gaps are, and show you exactly what phase of programming you need — and what it'll take to build from there. No pressure. No pitch. Just clarity.</p>
-      <a href="https://TheStrengthBlueprint.as.me/" target="_blank" class="btn-solid reveal btn-cta-primary">Book Free Movement Assessment</a>
+      <button onclick="openLeadForm()" class="btn-solid reveal btn-cta-primary" style="border:none;cursor:pointer;">Book Free Movement Assessment</button>
     </div>
   </section>
 
@@ -409,8 +515,8 @@
       </div>
       <div class="footer-col">
         <h4>Programs</h4>
-        <a href="https://TheStrengthBlueprint.as.me/" target="_blank">1-on-1 Coaching</a>
-        <a href="https://TheStrengthBlueprint.as.me/" target="_blank">Free Assessment</a>
+        <a href="https://TheStrengthBlueprint.as.me/consultationcall20" target="_blank">1-on-1 Coaching</a>
+        <a href="https://TheStrengthBlueprint.as.me/consultationcall20" target="_blank">Free Assessment</a>
         <a href="#method">Pain Rehab</a>
         <a href="#method">Strength & Hypertrophy</a>
       </div>
@@ -427,7 +533,83 @@
     </div>
   </footer>
 
+  <!-- Lead Capture Modal -->
+  <div class="lm-overlay" id="leadModal" onclick="if(event.target===this)closeLeadForm()">
+    <div class="lm-modal">
+      <button class="lm-close" onclick="closeLeadForm()">✕</button>
+      <div id="lmForm">
+        <div class="lm-eyebrow">Free Assessment</div>
+        <div class="lm-title">Let's Figure Out<br>What You Need.</div>
+        <div class="lm-field">
+          <label>First Name *</label>
+          <input type="text" id="lmName" placeholder="Jane" autocomplete="given-name">
+        </div>
+        <div class="lm-field">
+          <label>Email *</label>
+          <input type="email" id="lmEmail" placeholder="jane@email.com" autocomplete="email">
+        </div>
+        <div class="lm-field">
+          <label>What are you dealing with? (optional)</label>
+          <textarea id="lmMessage" placeholder="E.g. Lower back pain for 2 years, want to get back to lifting…"></textarea>
+        </div>
+        <button class="lm-submit" id="lmSubmitBtn" onclick="submitLeadForm()">Get My Free Assessment</button>
+      </div>
+      <div class="lm-success" id="lmSuccess">
+        <h3>You're In.</h3>
+        <p>Check your inbox — we're sending your booking link and consultation form now.<br><br>See you on the call.</p>
+      </div>
+    </div>
+  </div>
+
   <script>
+    // ── Replace with your deployed Apps Script web app URL ──
+    var CRM_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwBwwiqqZZXn31PI06y0qkbEn5iXfQfsKfLz0XI7GDnuMEXJFsHIPeEHFgdbXQpBAHF/exec';
+
+    function openLeadForm() {
+      document.getElementById('leadModal').classList.add('open');
+      document.getElementById('lmForm').style.display = '';
+      document.getElementById('lmSuccess').style.display = 'none';
+      var btn = document.getElementById('lmSubmitBtn');
+      btn.disabled = false;
+      btn.textContent = 'Get My Free Assessment';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLeadForm() {
+      document.getElementById('leadModal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function submitLeadForm() {
+      var name    = document.getElementById('lmName').value.trim();
+      var email   = document.getElementById('lmEmail').value.trim();
+      var message = document.getElementById('lmMessage').value.trim();
+      if (!name)  { document.getElementById('lmName').focus(); return; }
+      if (!email || !email.includes('@')) { document.getElementById('lmEmail').focus(); return; }
+
+      var btn = document.getElementById('lmSubmitBtn');
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      if (CRM_WEBHOOK_URL && CRM_WEBHOOK_URL !== 'YOUR_APPS_SCRIPT_WEBAPP_URL_HERE') {
+        fetch(CRM_WEBHOOK_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify({ source: 'website_form', first_name: name, email: email, question: message })
+        }).catch(function() {});
+      }
+
+      setTimeout(function() {
+        document.getElementById('lmForm').style.display = 'none';
+        document.getElementById('lmSuccess').style.display = 'block';
+      }, 600);
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLeadForm();
+    });
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add('visible');
@@ -451,6 +633,4 @@
   </script>
 
 </body>
-</html>
-
 </html>

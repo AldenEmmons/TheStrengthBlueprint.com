@@ -53,6 +53,7 @@
   .btn-primary { background: #fff; color: #1a1a1a; }
   .btn-ghost { background: transparent; color: #ccc; border: 1px solid #444; }
   .btn-danger { background: #e53e3e; color: #fff; }
+  .btn-gold { background: #f5a800; color: #1a1a1a; }
   .btn-sm { padding: 4px 10px; font-size: 12px; }
 
   /* ── Toolbar ─────────────────────────────────────── */
@@ -449,6 +450,14 @@
     <button class="btn btn-danger btn-sm" onclick="deleteLead()">Delete</button>
   </div>
 
+  <div style="border-top:1px solid #f0f0f0;padding-top:16px;">
+    <div style="font-size:11px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;">Workout Plan</div>
+    <div style="display:flex;align-items:center;gap:12px;">
+      <button class="btn btn-gold" id="sendPlanBtn" onclick="sendPlan()">Send Plan</button>
+      <span id="sendPlanStatus" style="font-size:12px;color:#38a169;display:none;">Plan scheduled — sends in 2 days.</span>
+    </div>
+  </div>
+
   <div class="notes-section">
     <h3>Notes & Activity</h3>
     <div id="notesList"></div>
@@ -702,6 +711,14 @@
     document.getElementById('notesList').innerHTML = '<div style="color:#aaa;font-size:12px;">Loading notes…</div>';
     document.getElementById('newNoteText').value = '';
 
+    // Reset Send Plan button
+    var spBtn = document.getElementById('sendPlanBtn');
+    spBtn.disabled = false;
+    spBtn.textContent = 'Send Plan';
+    spBtn.style.background = '';
+    spBtn.style.color = '';
+    document.getElementById('sendPlanStatus').style.display = 'none';
+
     document.getElementById('panelOverlay').classList.add('open');
     document.getElementById('detailPanel').classList.add('open');
 
@@ -790,6 +807,33 @@
       })
       .withFailureHandler(function(err) { showToast('Error: ' + err.message); })
       .createNote(currentLeadId, 'Note', text, userEmail);
+  }
+
+  // ── Send Plan ──────────────────────────────────────
+  function sendPlan() {
+    if (!currentLeadId) return;
+    if (!confirm('Generate and schedule the workout plan for this client?\n\nThe plan email will send in 2 days. This cannot be undone.')) return;
+
+    var btn    = document.getElementById('sendPlanBtn');
+    var status = document.getElementById('sendPlanStatus');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Generating…';
+    status.style.display = 'none';
+
+    google.script.run
+      .withSuccessHandler(function() {
+        btn.textContent  = 'Plan Sent ✓';
+        btn.style.background = '#38a169';
+        btn.style.color  = '#fff';
+        status.style.display = 'inline';
+        showToast('Plan scheduled — sends in 2 days.');
+      })
+      .withFailureHandler(function(err) {
+        btn.disabled = false;
+        btn.textContent = 'Send Plan';
+        showToast('Error: ' + err.message);
+      })
+      .sendPlanForLead(currentLeadId);
   }
 
   // ── Helpers ────────────────────────────────────────

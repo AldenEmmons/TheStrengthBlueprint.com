@@ -9,6 +9,8 @@ var PLAN_DAY_EXERCISE_ROWS = [10, 23, 36, 49];
 
 /**
  * Main handler. Called from doPost() in Code.gs when a Stripe payload arrives.
+ * Moves lead to Client stage and sends the onboarding call booking link.
+ * Plan is generated separately when Luke clicks "Send Plan" in the CRM.
  * Expected payload: { source: 'stripe', email: '...', payment_id: '...', name: '...' }
  */
 function processPaymentWebhook(data) {
@@ -38,31 +40,109 @@ function processPaymentWebhook(data) {
   // Move to Client stage and log payment
   updateLeadStage(leadId, 'Client');
   var stripeRef = data.payment_id || data.checkout_session_id || 'n/a';
-  createNote(leadId, 'Payment', 'Payment received via Stripe Payment Link (ID: ' + stripeRef + '). Workout plan generation triggered.', 'system');
+  createNote(leadId, 'Payment', 'Payment received (Stripe ID: ' + stripeRef + '). Onboarding call booking link sent.', 'system');
 
-  // Get all notes — intake form + Luke's call notes
-  var notes = getNotesForLead(leadId);
+  // Send onboarding call booking link
+  var firstName = lead.first_name || '';
+  sendOnboardingCallEmail(firstName, email);
+
+  Logger.log('PaymentWebhook: onboarding call email sent to ' + email);
+}
+
+/**
+ * Sends the onboarding appointment booking link after payment.
+ */
+function sendOnboardingCallEmail(firstName, toEmail) {
+  var subject = 'Payment Confirmed — Book Your Onboarding Call | The Strength Blueprint';
+  GmailApp.sendEmail(toEmail, subject, '', {
+    htmlBody: buildOnboardingCallEmailBody(firstName || 'there'),
+    name: 'The Strength Blueprint'
+  });
+  Logger.log('sendOnboardingCallEmail: sent to ' + toEmail);
+}
+
+function buildOnboardingCallEmailBody(firstName) {
+  var name       = firstName || 'there';
+  var acuityLink = 'https://thestrengthblueprint.as.me/schedule/785b0225/appointment/91293090/calendar/13871531?appointmentTypeIds[]=91293090';
+
+  return (
+    '<!DOCTYPE html>' +
+    '<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>' +
+    '<body style="margin:0;padding:0;background:#f0f0f0;">' +
+    '<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f0f0f0">' +
+    '<tr><td align="center" style="padding:32px 8px;">' +
+    '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;border-radius:6px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.15);">' +
+
+    '<tr><td bgcolor="#111111" style="padding:32px 40px 28px;">' +
+      '<table width="100%" cellpadding="0" cellspacing="0" border="0">' +
+      '<tr><td><table cellpadding="0" cellspacing="0" border="0" style="display:inline-table;"><tr><td bgcolor="#f5a800" style="padding:8px 14px;border-radius:4px;"><span style="font-family:Arial Black,Arial,sans-serif;font-size:22px;font-weight:900;color:#ffffff;letter-spacing:-1px;">TSB</span></td></tr></table></td></tr>' +
+      '<tr><td style="padding-top:18px;"><p style="margin:0;font-family:Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#f5a800;">The Strength Blueprint</p></td></tr>' +
+      '<tr><td style="padding-top:10px;"><h1 style="margin:0;font-family:Arial Black,Arial,sans-serif;font-size:28px;font-weight:900;color:#ffffff;text-transform:uppercase;letter-spacing:0.5px;line-height:1.2;">Payment Confirmed,<br>' + name + '.</h1></td></tr>' +
+      '</table>' +
+    '</td></tr>' +
+
+    '<tr><td bgcolor="#f5a800" style="height:4px;font-size:0;line-height:0;">&nbsp;</td></tr>' +
+
+    '<tr><td bgcolor="#ffffff" style="padding:36px 40px;">' +
+      '<p style="margin:0 0 28px;font-family:Arial,sans-serif;font-size:16px;line-height:1.75;color:#333333;">' +
+        'You\'re in. Your next step is to book your onboarding call.' +
+      '</p>' +
+      '<p style="margin:0 0 28px;font-family:Arial,sans-serif;font-size:15px;line-height:1.75;color:#555555;">' +
+        'On this call we\'ll go through your consultation form together. Once we\'ve talked, your personalized program gets built and delivered to you.' +
+      '</p>' +
+
+      '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:36px;"><tr>' +
+        '<td align="center">' +
+          '<a href="' + acuityLink + '" style="display:inline-block;padding:16px 36px;background:#f5a800;color:#111111;font-family:Arial Black,Arial,sans-serif;font-size:13px;font-weight:900;text-transform:uppercase;letter-spacing:2px;text-decoration:none;border-radius:4px;">Book Onboarding Call &rarr;</a>' +
+        '</td>' +
+      '</tr></table>' +
+
+      '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;"><tr><td style="border-top:1px solid #eeeeee;">&nbsp;</td></tr></table>' +
+
+      '<p style="margin:0;font-family:Arial,sans-serif;font-size:15px;color:#333333;line-height:1.6;">' +
+        'Questions? Just reply to this email.<br><br>' +
+        '<strong style="color:#111111;">The Strength Blueprint Team</strong><br>' +
+        '<span style="color:#f5a800;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">Assessment-Driven. Criterion-Progressed.</span>' +
+      '</p>' +
+    '</td></tr>' +
+
+    '<tr><td bgcolor="#111111" style="padding:18px 40px;"><p style="margin:0;font-family:Arial,sans-serif;font-size:11px;color:#666666;letter-spacing:2px;text-transform:uppercase;">Evidence-Based &nbsp;&#183;&nbsp; Clinical-Grade &nbsp;&#183;&nbsp; Online Strength Coaching</p></td></tr>' +
+
+    '</table></td></tr></table></body></html>'
+  );
+}
+
+/**
+ * Called by the CRM "Send Plan" button. Generates the workout plan via Claude,
+ * fills the template, and schedules the email 2 days out at 9 AM.
+ * Exposed to google.script.run from App.html.
+ */
+function sendPlanForLead(leadId) {
+  var lead = getLeadById(leadId);
+  if (!lead) throw new Error('Lead not found: ' + leadId);
+
+  var notes      = getNotesForLead(leadId);
+  var clientName = ((lead.first_name || '') + ' ' + (lead.last_name || '')).trim() || lead.email;
 
   // Generate plan via Claude
   var planJSON;
   try {
     planJSON = generatePlanFromCRM(lead, notes);
   } catch (err) {
-    Logger.log('PaymentWebhook: plan generation failed — ' + err.message);
+    Logger.log('sendPlanForLead: generation failed — ' + err.message);
     notifyTrainerOfPlanError(lead, err.message);
-    return;
+    throw err;
   }
 
   // Fill the Excel template
-  var clientName = ((lead.first_name || '') + ' ' + (lead.last_name || '')).trim() || email;
-  var answers    = buildAnswersFromLead(lead, notes);
+  var answers = buildAnswersFromLead(lead, notes);
   var xlsxBlob;
   try {
     xlsxBlob = fillPlanTemplate(answers, planJSON);
   } catch (err) {
-    Logger.log('PaymentWebhook: template fill failed — ' + err.message);
+    Logger.log('sendPlanForLead: template fill failed — ' + err.message);
     notifyTrainerOfPlanError(lead, 'Template fill failed: ' + err.message);
-    return;
+    throw err;
   }
 
   // Schedule email for 2 days from now at 9 AM
@@ -71,9 +151,10 @@ function processPaymentWebhook(data) {
   sendAt.setHours(9, 0, 0, 0);
 
   schedulePlanEmail(lead.email, clientName, planJSON, xlsxBlob, sendAt, leadId);
-  createNote(leadId, 'Automation', 'Workout plan generated and email scheduled for ' + sendAt.toDateString() + '.', 'system');
+  createNote(leadId, 'Automation', 'Plan generated by coach. Email scheduled for ' + sendAt.toDateString() + '.', 'system');
 
-  Logger.log('PaymentWebhook: plan scheduled for ' + sendAt.toISOString() + ' — ' + clientName);
+  Logger.log('sendPlanForLead: scheduled for ' + lead.email + ', sends ' + sendAt.toISOString());
+  return { status: 'ok', sendAt: sendAt.toISOString() };
 }
 
 

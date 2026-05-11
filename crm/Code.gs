@@ -33,6 +33,9 @@ function doPost(e) {
     } else if (body.source === 'stripe' || body.payment_id !== undefined || body.checkout_session_id !== undefined) {
       // Stripe payment via Zapier
       processPaymentWebhook(body);
+    } else if (body.source === 'website_form') {
+      // Website lead capture form
+      handleWebsiteForm(body);
     } else if (body.first_name !== undefined || body.email !== undefined) {
       // Zapier Facebook Lead Ad fallback — flat JSON
       processZapierPayload(body);
@@ -91,4 +94,111 @@ function testGetAllLeads() {
   var leads = getAllLeads();
   Logger.log('Count: ' + leads.length);
   Logger.log(JSON.stringify(leads));
+}
+
+
+// ============================================================
+// Website Form Handler
+// ============================================================
+
+function handleWebsiteForm(data) {
+  var email     = (data.email || '').toLowerCase().trim();
+  var firstName = (data.first_name || '').trim();
+  var question  = (data.question || '').trim();
+
+  if (!email && !firstName) {
+    Logger.log('handleWebsiteForm: no email or name — skipping');
+    return;
+  }
+
+  Logger.log('handleWebsiteForm: new lead from website — ' + email);
+
+  var lead = email ? findLeadByEmail(email) : null;
+  if (!lead) {
+    lead = createLead({
+      first_name: firstName,
+      last_name:  '',
+      email:      email,
+      source:     'Website',
+      stage:      'New Lead'
+    });
+  }
+
+  if (question) {
+    createNote(lead.lead_id, 'Website Form', question, 'system');
+  }
+
+  if (email) {
+    sendLeadWelcomeEmail(firstName || 'there', email);
+  }
+
+  Logger.log('handleWebsiteForm: processed lead ' + lead.lead_id);
+}
+
+function sendLeadWelcomeEmail(firstName, toEmail) {
+  var subject = 'Your Free Assessment — Next Steps | The Strength Blueprint';
+  GmailApp.sendEmail(toEmail, subject, '', {
+    htmlBody: buildLeadWelcomeEmailBody(firstName),
+    name: 'The Strength Blueprint'
+  });
+  Logger.log('sendLeadWelcomeEmail: sent to ' + toEmail);
+}
+
+function buildLeadWelcomeEmailBody(firstName) {
+  var name           = firstName || 'there';
+  var acuityLink     = 'https://TheStrengthBlueprint.as.me/consultationcall20';
+  var consultLink    = 'https://docs.google.com/forms/d/1uEvcX-esGwYE0Elcf88DdMA1qQ2xNkcn4bCoCX2Ttb0/viewform';
+
+  return (
+    '<!DOCTYPE html>' +
+    '<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>' +
+    '<body style="margin:0;padding:0;background:#f0f0f0;">' +
+    '<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f0f0f0">' +
+    '<tr><td align="center" style="padding:32px 8px;">' +
+    '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;border-radius:6px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.15);">' +
+
+    '<tr><td bgcolor="#111111" style="padding:32px 40px 28px;">' +
+      '<table width="100%" cellpadding="0" cellspacing="0" border="0">' +
+      '<tr><td><table cellpadding="0" cellspacing="0" border="0" style="display:inline-table;"><tr><td bgcolor="#f5a800" style="padding:8px 14px;border-radius:4px;"><span style="font-family:Arial Black,Arial,sans-serif;font-size:22px;font-weight:900;color:#ffffff;letter-spacing:-1px;">TSB</span></td></tr></table></td></tr>' +
+      '<tr><td style="padding-top:18px;"><p style="margin:0;font-family:Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#f5a800;">The Strength Blueprint</p></td></tr>' +
+      '<tr><td style="padding-top:10px;"><h1 style="margin:0;font-family:Arial Black,Arial,sans-serif;font-size:28px;font-weight:900;color:#ffffff;text-transform:uppercase;letter-spacing:0.5px;line-height:1.2;">Let\'s Get You<br>Assessed, ' + name + '.</h1></td></tr>' +
+      '</table>' +
+    '</td></tr>' +
+
+    '<tr><td bgcolor="#f5a800" style="height:4px;font-size:0;line-height:0;">&nbsp;</td></tr>' +
+
+    '<tr><td bgcolor="#ffffff" style="padding:36px 40px;">' +
+      '<p style="margin:0 0 28px;font-family:Arial,sans-serif;font-size:16px;line-height:1.75;color:#333333;">Thanks for reaching out. Your next two steps are simple:</p>' +
+
+      '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;"><tr>' +
+        '<td width="36" valign="top"><table cellpadding="0" cellspacing="0" border="0"><tr><td bgcolor="#f5a800" style="width:28px;height:28px;border-radius:50%;text-align:center;vertical-align:middle;"><span style="font-family:Arial Black,Arial,sans-serif;font-size:13px;font-weight:900;color:#ffffff;">1</span></td></tr></table></td>' +
+        '<td style="padding-left:14px;padding-top:2px;">' +
+          '<p style="margin:0 0 4px;font-family:Arial,sans-serif;font-size:15px;font-weight:700;color:#111111;">Book your free 30-min call</p>' +
+          '<p style="margin:0 0 10px;font-family:Arial,sans-serif;font-size:13px;color:#666666;line-height:1.6;">No pitch — just a conversation to figure out where you are and where you want to go.</p>' +
+          '<a href="' + acuityLink + '" style="display:inline-block;padding:10px 22px;background:#f5a800;color:#111111;font-family:Arial Black,Arial,sans-serif;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:1px;text-decoration:none;border-radius:3px;">Book Free Call &rarr;</a>' +
+        '</td>' +
+      '</tr></table>' +
+
+      '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:36px;"><tr>' +
+        '<td width="36" valign="top"><table cellpadding="0" cellspacing="0" border="0"><tr><td bgcolor="#111111" style="width:28px;height:28px;border-radius:50%;text-align:center;vertical-align:middle;"><span style="font-family:Arial Black,Arial,sans-serif;font-size:13px;font-weight:900;color:#ffffff;">2</span></td></tr></table></td>' +
+        '<td style="padding-left:14px;padding-top:2px;">' +
+          '<p style="margin:0 0 4px;font-family:Arial,sans-serif;font-size:15px;font-weight:700;color:#111111;">Fill out the consultation form</p>' +
+          '<p style="margin:0 0 10px;font-family:Arial,sans-serif;font-size:13px;color:#666666;line-height:1.6;">Takes 5&ndash;10 minutes. The more detail you give, the better the call goes.</p>' +
+          '<a href="' + consultLink + '" style="display:inline-block;padding:10px 22px;background:#f0f0f0;color:#111111;font-family:Arial Black,Arial,sans-serif;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:1px;text-decoration:none;border-radius:3px;">Open Consultation Form &rarr;</a>' +
+        '</td>' +
+      '</tr></table>' +
+
+      '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;"><tr><td style="border-top:1px solid #eeeeee;">&nbsp;</td></tr></table>' +
+
+      '<p style="margin:0;font-family:Arial,sans-serif;font-size:15px;color:#333333;line-height:1.6;">' +
+        'Questions before the call? Just reply to this email.<br><br>' +
+        '<strong style="color:#111111;">The Strength Blueprint Team</strong><br>' +
+        '<span style="color:#f5a800;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">Assessment-Driven. Criterion-Progressed.</span>' +
+      '</p>' +
+    '</td></tr>' +
+
+    '<tr><td bgcolor="#111111" style="padding:18px 40px;"><p style="margin:0;font-family:Arial,sans-serif;font-size:11px;color:#666666;letter-spacing:2px;text-transform:uppercase;">Evidence-Based &nbsp;&#183;&nbsp; Clinical-Grade &nbsp;&#183;&nbsp; Online Strength Coaching</p></td></tr>' +
+
+    '</table></td></tr></table></body></html>'
+  );
 }

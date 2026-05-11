@@ -146,7 +146,7 @@ function sendLeadWelcomeEmail(firstName, toEmail) {
 
 function buildLeadWelcomeEmailBody(firstName) {
   var name           = firstName || 'there';
-  var acuityLink     = 'https://TheStrengthBlueprint.as.me/consultationcall20';
+  var acuityLink     = 'https://TheStrengthBlueprint.as.me/';
   var consultLink    = 'https://docs.google.com/forms/d/1uEvcX-esGwYE0Elcf88DdMA1qQ2xNkcn4bCoCX2Ttb0/viewform';
 
   return (

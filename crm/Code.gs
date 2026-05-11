@@ -96,6 +96,10 @@ function testGetAllLeads() {
   Logger.log(JSON.stringify(leads));
 }
 
+function testEmail() {
+  sendLeadWelcomeEmail('Alden', 'aldenemmons6@gmail.com');
+}
+
 
 // ============================================================
 // Website Form Handler

@@ -107,10 +107,13 @@ function testEmail() {
 
 function handleWebsiteForm(data) {
   var email     = (data.email || '').toLowerCase().trim();
-  var firstName = (data.first_name || '').trim();
+  var fullName  = (data.first_name || '').trim();
+  var nameParts = fullName.split(/\s+/);
+  var firstName = nameParts[0] || '';
+  var lastName  = nameParts.slice(1).join(' ') || '';
   var phone     = (data.phone || '').trim();
 
-  if (!email && !firstName) {
+  if (!email && !fullName) {
     Logger.log('handleWebsiteForm: no email or name — skipping');
     return;
   }
@@ -121,7 +124,7 @@ function handleWebsiteForm(data) {
   if (!lead) {
     lead = createLead({
       first_name: firstName,
-      last_name:  '',
+      last_name:  lastName,
       email:      email,
       phone:      phone,
       source:     'Website',
@@ -132,7 +135,7 @@ function handleWebsiteForm(data) {
   }
 
   if (email) {
-    sendLeadWelcomeEmail(firstName || 'there', email);
+    sendLeadWelcomeEmail(firstName || fullName || 'there', email);
   }
 
   Logger.log('handleWebsiteForm: processed lead ' + lead.lead_id);

@@ -128,7 +128,7 @@ function handleWebsiteForm(data) {
       email:      email,
       phone:      phone,
       source:     'Website',
-      stage:      'New Lead'
+      stage:      'Warm Lead'
     });
   } else if (phone && !lead.phone) {
     updateLead(lead.lead_id, { phone: phone });

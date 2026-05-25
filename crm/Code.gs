@@ -108,7 +108,7 @@ function testEmail() {
 function handleWebsiteForm(data) {
   var email     = (data.email || '').toLowerCase().trim();
   var firstName = (data.first_name || '').trim();
-  var question  = (data.question || '').trim();
+  var phone     = (data.phone || '').trim();
 
   if (!email && !firstName) {
     Logger.log('handleWebsiteForm: no email or name — skipping');
@@ -123,13 +123,12 @@ function handleWebsiteForm(data) {
       first_name: firstName,
       last_name:  '',
       email:      email,
+      phone:      phone,
       source:     'Website',
       stage:      'New Lead'
     });
-  }
-
-  if (question) {
-    createNote(lead.lead_id, 'Website Form', question, 'system');
+  } else if (phone && !lead.phone) {
+    updateLead(lead.lead_id, { phone: phone });
   }
 
   if (email) {
@@ -150,7 +149,7 @@ function sendLeadWelcomeEmail(firstName, toEmail) {
 
 function buildLeadWelcomeEmailBody(firstName) {
   var name           = firstName || 'there';
-  var acuityLink     = 'https://TheStrengthBlueprint.as.me/';
+  var acuityLink     = 'https://thestrengthblueprint.as.me/schedule/785b0225/appointment/92729599/calendar/13871531?appointmentTypeIds[]=92729599';
   var consultLink    = 'https://docs.google.com/forms/d/1uEvcX-esGwYE0Elcf88DdMA1qQ2xNkcn4bCoCX2Ttb0/viewform';
 
   return (

@@ -147,8 +147,8 @@
 
   /* ── Stage Colors ────────────────────────────────── */
   .col-New\ Lead    .column-count { background: #718096; }
-  .col-Contacted    .column-count { background: #3182ce; }
-  .col-Assessment\ Booked .column-count { background: #805ad5; }
+  .col-Warm\ Lead   .column-count { background: #3182ce; }
+  .col-Hot\ Lead    .column-count { background: #dd6b20; }
   .col-Client       .column-count { background: #38a169; }
   .col-Lost         .column-count { background: #e53e3e; }
 
@@ -474,7 +474,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  var STAGES = ['New Lead','Contacted','Assessment Booked','Client','Lost'];
+  var STAGES = ['New Lead','Warm Lead','Hot Lead','Client','Lost'];
   var allLeads = [];
   var currentLeadId = null;
   var userEmail = '<?= userEmail ?>';

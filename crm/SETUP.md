@@ -22,7 +22,7 @@ authorized_emails     | alden@youremail.com,luke@youremail.com
 fb_verify_token       | tsb_webhook_verify_2026
 reminder_email_to     | alden@youremail.com,luke@youremail.com
 reminder_days_overdue | 1
-pipeline_stages       | New Lead,Contacted,Assessment Booked,Client,Lost
+pipeline_stages       | New Lead,Warm Lead,Hot Lead,Client,Lost
 CRM_APP_URL           | (fill in after deploying)
 ```
 

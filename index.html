@@ -288,7 +288,6 @@
     .lm-field textarea::placeholder { color: rgba(255,255,255,0.28); }
     .lm-field input:focus,
     .lm-field textarea:focus { border-color: var(--gold); }
-    .lm-field textarea { resize: vertical; min-height: 80px; }
     .lm-submit {
       width: 100%;
       padding: 15px;
@@ -306,16 +305,6 @@
     }
     .lm-submit:hover { background: var(--gold2); }
     .lm-submit:disabled { opacity: 0.55; cursor: default; }
-    .lm-success { display: none; text-align: center; padding: 16px 0; }
-    .lm-success h3 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 2.2rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 14px;
-    }
-    .lm-success p { color: rgba(255,255,255,0.72); line-height: 1.75; font-size: 0.95rem; }
   </style>
 </head>
 <body>
@@ -326,7 +315,7 @@
       <a href="#method">The Method</a>
       <a href="#for">Who It's For</a>
       <a href="#science">The Science</a>
-      <a href="https://TheStrengthBlueprint.as.me/" target="_blank" class="header-cta">Free Assessment</a>
+      <button onclick="openLeadForm()" class="header-cta" style="border:none;cursor:pointer;">Free Assessment</button>
     </nav>
   </header>
 
@@ -515,8 +504,8 @@
       </div>
       <div class="footer-col">
         <h4>Programs</h4>
-        <a href="https://TheStrengthBlueprint.as.me/" target="_blank">1-on-1 Coaching</a>
-        <a href="https://TheStrengthBlueprint.as.me/" target="_blank">Free Assessment</a>
+        <a href="javascript:void(0)" onclick="openLeadForm()">1-on-1 Coaching</a>
+        <a href="javascript:void(0)" onclick="openLeadForm()">Free Assessment</a>
         <a href="#method">Pain Rehab</a>
         <a href="#method">Strength & Hypertrophy</a>
       </div>
@@ -549,14 +538,10 @@
           <input type="email" id="lmEmail" placeholder="jane@email.com" autocomplete="email">
         </div>
         <div class="lm-field">
-          <label>What are you dealing with? (optional)</label>
-          <textarea id="lmMessage" placeholder="E.g. Lower back pain for 2 years, want to get back to lifting…"></textarea>
+          <label>Phone Number *</label>
+          <input type="tel" id="lmPhone" placeholder="(555) 555-5555" autocomplete="tel">
         </div>
-        <button class="lm-submit" id="lmSubmitBtn" onclick="submitLeadForm()">Get My Free Assessment</button>
-      </div>
-      <div class="lm-success" id="lmSuccess">
-        <h3>You're In.</h3>
-        <p>Check your inbox — we're sending your booking link and consultation form now.<br><br>See you on the call.</p>
+        <button class="lm-submit" id="lmSubmitBtn" onclick="submitLeadForm()">Book My Free Call</button>
       </div>
     </div>
   </div>
@@ -568,10 +553,9 @@
     function openLeadForm() {
       document.getElementById('leadModal').classList.add('open');
       document.getElementById('lmForm').style.display = '';
-      document.getElementById('lmSuccess').style.display = 'none';
       var btn = document.getElementById('lmSubmitBtn');
       btn.disabled = false;
-      btn.textContent = 'Get My Free Assessment';
+      btn.textContent = 'Book My Free Call';
       document.body.style.overflow = 'hidden';
     }
 
@@ -580,30 +564,32 @@
       document.body.style.overflow = '';
     }
 
+    var ACUITY_URL = 'https://thestrengthblueprint.as.me/schedule/785b0225/appointment/92729599/calendar/13871531?appointmentTypeIds[]=92729599';
+
     function submitLeadForm() {
-      var name    = document.getElementById('lmName').value.trim();
-      var email   = document.getElementById('lmEmail').value.trim();
-      var message = document.getElementById('lmMessage').value.trim();
+      var name  = document.getElementById('lmName').value.trim();
+      var email = document.getElementById('lmEmail').value.trim();
+      var phone = document.getElementById('lmPhone').value.trim();
       if (!name)  { document.getElementById('lmName').focus(); return; }
       if (!email || !email.includes('@')) { document.getElementById('lmEmail').focus(); return; }
+      if (!phone) { document.getElementById('lmPhone').focus(); return; }
 
       var btn = document.getElementById('lmSubmitBtn');
       btn.disabled = true;
-      btn.textContent = 'Sending…';
+      btn.textContent = 'Booking…';
 
       if (CRM_WEBHOOK_URL && CRM_WEBHOOK_URL !== 'YOUR_APPS_SCRIPT_WEBAPP_URL_HERE') {
         fetch(CRM_WEBHOOK_URL, {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'text/plain' },
-          body: JSON.stringify({ source: 'website_form', first_name: name, email: email, question: message })
+          body: JSON.stringify({ source: 'website_form', first_name: name, email: email, phone: phone })
         }).catch(function() {});
       }
 
       setTimeout(function() {
-        document.getElementById('lmForm').style.display = 'none';
-        document.getElementById('lmSuccess').style.display = 'block';
-      }, 600);
+        window.location.href = ACUITY_URL;
+      }, 400);
     }
 
     document.addEventListener('keydown', function(e) {

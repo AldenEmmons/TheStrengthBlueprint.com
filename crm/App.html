@@ -157,7 +157,7 @@
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,.45);
+    background: rgba(0,0,0,.28);
     z-index: 200;
     align-items: center;
     justify-content: center;
@@ -204,7 +204,7 @@
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,.35);
+    background: rgba(0,0,0,.20);
     z-index: 200;
   }
   .panel-overlay.open { display: block; }
@@ -322,9 +322,42 @@
     .toolbar { padding: 10px 12px; }
     header { padding: 0 12px; }
   }
+
+  /* ── Splash Screen ───────────────────────────────── */
+  #splashScreen {
+    position: fixed; inset: 0;
+    background: #1a1a1a;
+    z-index: 9999;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 8px;
+    transition: opacity 0.5s ease;
+  }
+  #splashScreen.fade { opacity: 0; pointer-events: none; }
+  .splash-logo { font-size: 28px; font-weight: 800; color: #fff; letter-spacing: 0.02em; }
+  .splash-logo em { color: #f5a800; font-style: normal; }
+  .splash-sub { font-size: 11px; font-weight: 600; letter-spacing: 0.25em; color: rgba(255,255,255,0.45); text-transform: uppercase; }
+  .splash-bar {
+    width: 0; height: 2px; background: #f5a800;
+    margin-top: 20px; border-radius: 2px;
+    animation: barGrow 0.9s ease forwards 0.2s;
+  }
+  @keyframes barGrow { to { width: 120px; } }
+
+  /* ── Modal Entrance Animation ────────────────────── */
+  @keyframes modalIn {
+    from { opacity: 0; transform: translateY(-14px) scale(0.97); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .overlay.open .modal { animation: modalIn 0.25s ease; }
 </style>
 </head>
 <body>
+
+<div id="splashScreen">
+  <div class="splash-logo">The Strength <em>Blueprint</em></div>
+  <div class="splash-sub">CRM</div>
+  <div class="splash-bar"></div>
+</div>
 
 <!-- Header -->
 <header>
@@ -478,6 +511,15 @@
   var allLeads = [];
   var currentLeadId = null;
   var userEmail = '<?= userEmail ?>';
+
+  // ── Splash Screen ─────────────────────────────────
+  window.addEventListener('DOMContentLoaded', function() {
+    var splash = document.getElementById('splashScreen');
+    setTimeout(function() {
+      splash.classList.add('fade');
+      setTimeout(function() { splash.style.display = 'none'; }, 500);
+    }, 1400);
+  });
 
   // ── Bootstrap ─────────────────────────────────────
   document.addEventListener('DOMContentLoaded', function() {

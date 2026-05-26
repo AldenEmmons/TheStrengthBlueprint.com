@@ -551,7 +551,7 @@
 
   <script>
     // ── Replace with your deployed Apps Script web app URL ──
-    var CRM_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwkiKb_gxD_4VVQl1XZ9q_KRb3HtnrO14y2mLHbjVoI1w_HuMDylpJzUrn0sCBLq7yr/exec';
+    var CRM_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxht2UO4ANNXh73zfj2nRvQtxu1npUWN4xfncwrT12XXDKZDLzsbix5KFuhqJPeGA4t/exec';
 
     function openLeadForm() {
       document.getElementById('leadModal').classList.add('open');
@@ -582,12 +582,8 @@
       btn.textContent = 'Booking…';
 
       if (CRM_WEBHOOK_URL && CRM_WEBHOOK_URL !== 'YOUR_APPS_SCRIPT_WEBAPP_URL_HERE') {
-        fetch(CRM_WEBHOOK_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'text/plain' },
-          body: JSON.stringify({ source: 'website_form', first_name: name, email: email, phone: phone })
-        }).catch(function() {});
+        var params = new URLSearchParams({ source: 'website_form', first_name: name, email: email, phone: phone });
+        fetch(CRM_WEBHOOK_URL + '?' + params.toString(), { method: 'GET', mode: 'no-cors' }).catch(function() {});
       }
 
       setTimeout(function() {

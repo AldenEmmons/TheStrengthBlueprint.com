@@ -13,6 +13,16 @@ function doGet(e) {
     return ContentService.createTextOutput('Forbidden').setResponseCode(403);
   }
 
+  // Handle website lead form (GET with URL params — avoids cross-origin POST redirect issue)
+  if (e && e.parameter && e.parameter.source === 'website_form') {
+    handleWebsiteForm({
+      email:      e.parameter.email      || '',
+      first_name: e.parameter.first_name || '',
+      phone:      e.parameter.phone      || ''
+    });
+    return ContentService.createTextOutput('ok');
+  }
+
   // Serve app (deployed as "Execute as: Me" — access controlled by URL)
   var email = 'alden';
   var template = HtmlService.createTemplateFromFile('App');

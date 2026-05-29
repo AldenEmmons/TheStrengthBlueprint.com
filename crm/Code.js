@@ -143,7 +143,7 @@ function handleWebsiteForm(data) {
   } else {
     var updates = {};
     if (phone && !lead.phone) updates.phone = phone;
-    if (lead.stage === 'New Lead' || lead.stage === 'Warm Lead') updates.stage = 'Warm Lead';
+    if (lead.stage === 'New Lead') updates.stage = 'Warm Lead';
     if (Object.keys(updates).length) updateLead(lead.lead_id, updates);
     lead = getLeadById(lead.lead_id);
   }

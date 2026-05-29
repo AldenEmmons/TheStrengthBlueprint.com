@@ -9,8 +9,6 @@ var PLAN_DAY_EXERCISE_ROWS = [10, 23, 36, 49];
 
 /**
  * Main handler. Called from doPost() in Code.gs when a Stripe payload arrives.
- * Moves lead to Client stage and sends the onboarding call booking link.
- * Plan is generated separately when Luke clicks "Send Plan" in the CRM.
  * Expected payload: { source: 'stripe', email: '...', payment_id: '...', name: '...' }
  */
 function processPaymentWebhook(data) {
@@ -31,114 +29,39 @@ function processPaymentWebhook(data) {
       last_name:  nameParts.slice(1).join(' ') || '',
       email:      email,
       source:     'Stripe',
-      stage:      'Hot Lead'
+      stage:      'Client'
     });
   }
 
   var leadId = lead.lead_id;
 
-  // Move to Hot Lead if they haven't progressed further already
-  if (['New Lead', 'Warm Lead'].indexOf(lead.stage) !== -1) {
-    updateLeadStage(leadId, 'Hot Lead');
-  }
+  // Move to Client stage and log payment
+  updateLeadStage(leadId, 'Client');
+  createNote(leadId, 'Payment', 'Payment received via Stripe (ID: ' + (data.payment_id || 'n/a') + '). Workout plan generation triggered.', 'system');
 
-  var stripeRef = data.payment_id || data.checkout_session_id || 'n/a';
-  createNote(leadId, 'Payment', 'Payment received — $299 first month (Stripe ID: ' + stripeRef + ').', 'system');
-
-  // Send payment confirmation
-  var firstName = lead.first_name || '';
-  sendPaymentConfirmationEmail(firstName, email);
-
-  Logger.log('PaymentWebhook: onboarding call email sent to ' + email);
-}
-
-/**
- * Sends payment confirmation after the $299 strategy session booking.
- */
-function sendPaymentConfirmationEmail(firstName, toEmail) {
-  var subject = 'Payment Confirmed — You\'re In | The Strength Blueprint';
-  GmailApp.sendEmail(toEmail, subject, '', {
-    htmlBody: buildPaymentConfirmationEmailBody(firstName || 'there'),
-    name: 'The Strength Blueprint'
-  });
-  Logger.log('sendPaymentConfirmationEmail: sent to ' + toEmail);
-}
-
-function buildPaymentConfirmationEmailBody(firstName) {
-  var name = firstName || 'there';
-
-  return (
-    '<!DOCTYPE html>' +
-    '<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>' +
-    '<body style="margin:0;padding:0;background:#f0f0f0;">' +
-    '<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f0f0f0">' +
-    '<tr><td align="center" style="padding:32px 8px;">' +
-    '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:580px;border-radius:6px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.15);">' +
-
-    '<tr><td bgcolor="#111111" style="padding:32px 40px 28px;">' +
-      '<table width="100%" cellpadding="0" cellspacing="0" border="0">' +
-      '<tr><td><table cellpadding="0" cellspacing="0" border="0" style="display:inline-table;"><tr><td bgcolor="#f5a800" style="padding:8px 14px;border-radius:4px;"><span style="font-family:Arial Black,Arial,sans-serif;font-size:22px;font-weight:900;color:#ffffff;letter-spacing:-1px;">TSB</span></td></tr></table></td></tr>' +
-      '<tr><td style="padding-top:18px;"><p style="margin:0;font-family:Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:#f5a800;">The Strength Blueprint</p></td></tr>' +
-      '<tr><td style="padding-top:10px;"><h1 style="margin:0;font-family:Arial Black,Arial,sans-serif;font-size:28px;font-weight:900;color:#ffffff;text-transform:uppercase;letter-spacing:0.5px;line-height:1.2;">You\'re In,<br>' + name + '.</h1></td></tr>' +
-      '</table>' +
-    '</td></tr>' +
-
-    '<tr><td bgcolor="#f5a800" style="height:4px;font-size:0;line-height:0;">&nbsp;</td></tr>' +
-
-    '<tr><td bgcolor="#ffffff" style="padding:36px 40px;">' +
-      '<p style="margin:0 0 20px;font-family:Arial,sans-serif;font-size:16px;line-height:1.75;color:#333333;">' +
-        'Payment confirmed. Your Blueprint Strategy Session is booked and we\'re ready to get to work.' +
-      '</p>' +
-      '<p style="margin:0 0 28px;font-family:Arial,sans-serif;font-size:15px;line-height:1.75;color:#555555;">' +
-        'Check your email for the Acuity booking confirmation with your call details. On the session we\'ll go deep on your history, set your phase, and map out your first month. Your program gets built right after.' +
-      '</p>' +
-
-      '<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:24px;"><tr><td style="border-top:1px solid #eeeeee;">&nbsp;</td></tr></table>' +
-
-      '<p style="margin:0;font-family:Arial,sans-serif;font-size:15px;color:#333333;line-height:1.6;">' +
-        'Questions before the call? Just reply here.<br><br>' +
-        '<strong style="color:#111111;">The Strength Blueprint Team</strong><br>' +
-        '<span style="color:#f5a800;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;">Assessment-Driven. Criterion-Progressed.</span>' +
-      '</p>' +
-    '</td></tr>' +
-
-    '<tr><td bgcolor="#111111" style="padding:18px 40px;"><p style="margin:0;font-family:Arial,sans-serif;font-size:11px;color:#666666;letter-spacing:2px;text-transform:uppercase;">Evidence-Based &nbsp;&#183;&nbsp; Clinical-Grade &nbsp;&#183;&nbsp; Online Strength Coaching</p></td></tr>' +
-
-    '</table></td></tr></table></body></html>'
-  );
-}
-
-/**
- * Called by the CRM "Send Plan" button. Generates the workout plan via Claude,
- * fills the template, and schedules the email 2 days out at 9 AM.
- * Exposed to google.script.run from App.html.
- */
-function sendPlanForLead(leadId) {
-  var lead = getLeadById(leadId);
-  if (!lead) throw new Error('Lead not found: ' + leadId);
-
-  var notes      = getNotesForLead(leadId);
-  var clientName = ((lead.first_name || '') + ' ' + (lead.last_name || '')).trim() || lead.email;
+  // Get all notes — intake form + Luke's call notes
+  var notes = getNotesForLead(leadId);
 
   // Generate plan via Claude
   var planJSON;
   try {
     planJSON = generatePlanFromCRM(lead, notes);
   } catch (err) {
-    Logger.log('sendPlanForLead: generation failed — ' + err.message);
+    Logger.log('PaymentWebhook: plan generation failed — ' + err.message);
     notifyTrainerOfPlanError(lead, err.message);
-    throw err;
+    return;
   }
 
   // Fill the Excel template
-  var answers = buildAnswersFromLead(lead, notes);
+  var clientName = ((lead.first_name || '') + ' ' + (lead.last_name || '')).trim() || email;
+  var answers    = buildAnswersFromLead(lead, notes);
   var xlsxBlob;
   try {
     xlsxBlob = fillPlanTemplate(answers, planJSON);
   } catch (err) {
-    Logger.log('sendPlanForLead: template fill failed — ' + err.message);
+    Logger.log('PaymentWebhook: template fill failed — ' + err.message);
     notifyTrainerOfPlanError(lead, 'Template fill failed: ' + err.message);
-    throw err;
+    return;
   }
 
   // Schedule email for 2 days from now at 9 AM
@@ -147,10 +70,9 @@ function sendPlanForLead(leadId) {
   sendAt.setHours(9, 0, 0, 0);
 
   schedulePlanEmail(lead.email, clientName, planJSON, xlsxBlob, sendAt, leadId);
-  createNote(leadId, 'Automation', 'Plan generated by coach. Email scheduled for ' + sendAt.toDateString() + '.', 'system');
+  createNote(leadId, 'Automation', 'Workout plan generated and email scheduled for ' + sendAt.toDateString() + '.', 'system');
 
-  Logger.log('sendPlanForLead: scheduled for ' + lead.email + ', sends ' + sendAt.toISOString());
-  return { status: 'ok', sendAt: sendAt.toISOString() };
+  Logger.log('PaymentWebhook: plan scheduled for ' + sendAt.toISOString() + ' — ' + clientName);
 }
 
 
@@ -192,64 +114,15 @@ function buildPromptFromNotes(lead, notes) {
   var lines = [];
 
   lines.push(
-    'You are a professional strength coach at The Strength Blueprint (TSB). ' +
-    'TSB bridges the gap between physical therapy and performance coaching for adults with chronic or recurring musculoskeletal pain, injury history, or movement limitations. ' +
+    'You are a professional personal trainer at The Strength Blueprint. ' +
     'Create a personalized 4-week monthly training program for the client below. ' +
     'This is a month-to-month coaching program — do NOT reference 12 weeks or long-term periodization. ' +
     'Return ONLY valid JSON — no preamble, no explanation, no markdown fences.\n\n' +
-
-    '── TSB PHASE SYSTEM ──\n' +
-    'TSB uses three criterion-based phases. Assign the client to the appropriate phase based on their pain level, history, and intake data:\n\n' +
-    'PHASE 1 — RESTORE: Goal: Reduce pain, restore baseline capacity, build trust in movement.\n' +
-    'Use when: Client reports significant active pain (NPRS > 3/10 on provocative movements), recent flare, or clear fear-avoidance pattern.\n' +
-    'Programming rules:\n' +
-    '- Lower volume, sub-threshold loading — never push into significant pain.\n' +
-    '- Use isometric loading for irritable areas (e.g., isometric holds for tendinopathy).\n' +
-    '- Graded exposure: start modified movements, progress progressively.\n' +
-    '- No heavy compound loading. Focus on building tolerance.\n' +
-    '- RIR target: 3–4 (very conservative — client should feel they could do many more reps).\n' +
-    '- Correctives: every corrective must have a clear target capacity and measurable progression. No 2x10 activation drills with no criteria.\n\n' +
-    'PHASE 2 — BRIDGE: Goal: Re-introduce loaded compound movement, build movement-specific capacity.\n' +
-    'Use when: Pain is manageable (NPRS ≤ 3/10), client has tolerated baseline programming for 14+ days.\n' +
-    'Programming rules:\n' +
-    '- MEV-anchored volume (minimum effective volume to drive adaptation).\n' +
-    '- Use RIR (Reps in Reserve) for autoregulation — note RIR target in the rir field.\n' +
-    '- RIR target: 2–3.\n' +
-    '- Tempo work and partial → full ROM progressions.\n' +
-    '- Conservative intensity progression. Bias toward stretch-position loading where safe.\n' +
-    '- Compound movements re-introduced at low-to-moderate intensity.\n\n' +
-    'PHASE 3 — BUILD: Goal: Drive client-specific outcomes — hypertrophy, strength, body composition, performance.\n' +
-    'Use when: Client has minimal or no active pain (NPRS ≤ 2/10), tolerates compound loading.\n' +
-    'Programming rules:\n' +
-    '- MEV → MAV → MRV progression across the program block.\n' +
-    '- Stretch-mediated hypertrophy bias: emphasize exercises with end-range/lengthened-position loading.\n' +
-    '- Periodized loading structure.\n' +
-    '- RIR target: 1–2.\n' +
-    '- Performance benchmarks are the primary signal.\n\n' +
-
-    '── BIOPSYCHOSOCIAL SCREENING ──\n' +
-    'When generating programs, consider all 4 domains from intake:\n' +
-    '1. Mechanical/load capacity: pain areas, injury history, what aggravates/relieves\n' +
-    '2. Sleep/stress/recovery: hours of sleep, stress level\n' +
-    '3. Beliefs/fear-avoidance: barriers reported, what has stopped them before, movement avoidance patterns\n' +
-    '4. Training history: training length, types, previous coaching\n\n' +
-
-    '── CORRECTIVE EXERCISE RULES ──\n' +
-    '- Every corrective must have a clear target capacity and measurable progression.\n' +
-    '- Do NOT prescribe endless activation drills (e.g., 2x10 glute bridges with no criteria) disconnected from symptoms or goals.\n' +
-    '- Do NOT add correctives based on theoretical structural findings the client has not reported as symptomatic.\n' +
-    '- Correctives must connect directly to the client\'s reported pain areas or movement goals.\n\n' +
-
-    '── CLAIMS LANGUAGE ──\n' +
-    '- Any client-facing text (intro, closing) must use approved language.\n' +
-    '- APPROVED: "build strength without breaking down", "train around pain not into it", "improve capacity", "resilience", "performance-ready", "assessment-driven", "individualized".\n' +
-    '- BANNED: "pain-free" as a promise, "fix", "cure", "heal", "treat", specific pain elimination timelines.\n\n' +
-
     'The program has EXACTLY 4 training days: Day A (Monday), Day B (Wednesday), Day C (Friday), Day D (Saturday). ' +
     'You MUST return all 4 days — no exceptions.\n\n' +
     'JSON structure:\n' +
     '{\n' +
-    '  "intro": "2-3 sentence personal intro referencing their specific goal, history, and phase placement. Use approved TSB language. Do not mention weeks beyond 4.",\n' +
+    '  "intro": "2-3 sentence personal intro referencing their specific goal, history, and situation. Do not mention weeks beyond 4.",\n' +
     '  "days": [\n' +
     '    {\n' +
     '      "label": "DAY A — Lower (Squat Focus)  |  Monday",\n' +
@@ -262,7 +135,7 @@ function buildPromptFromNotes(lead, notes) {
     '    { "label": "DAY C — Lower (Hip Hinge)  |  Friday", "exercises": [ ... ] },\n' +
     '    { "label": "DAY D — Upper (Pull Focus)  |  Saturday", "exercises": [ ... ] }\n' +
     '  ],\n' +
-    '  "closing": "Motivational closing note for this month. Use approved TSB language."\n' +
+    '  "closing": "Motivational closing note for this month"\n' +
     '}\n\n' +
     'Rules:\n' +
     '- EXACTLY 4 days in the array.\n' +
@@ -272,7 +145,7 @@ function buildPromptFromNotes(lead, notes) {
     '- cue = short coaching cue or tempo.\n' +
     '- sets = number for working sets, "-" for warmup.\n' +
     '- reps = string like "6-8", "10/leg", "15", or "-".\n' +
-    '- rir = string like "3", "2", "1", or "-" for warmup. Set per phase: Restore=3-4, Bridge=2-3, Build=1-2.\n' +
+    '- rir = string like "2", "1", or "-" for warmup.\n' +
     '- Return ONLY the JSON. Nothing else.'
   );
 
@@ -562,3 +435,11 @@ function notifyTrainerOfPlanError(lead, errorMessage) {
     'Please generate manually and email the client.\n\n— TSB Automation'
   );
 }
+function testPaymentWebhook() {                                       
+    processPaymentWebhook({                                             
+      source: 'stripe',                                                 
+      email: 'aldenemmons6@gmail.com',                                  
+      payment_id: 'test_123',                                           
+      name: 'Alden Emmons'                                              
+    });                                                                 
+  }                                   

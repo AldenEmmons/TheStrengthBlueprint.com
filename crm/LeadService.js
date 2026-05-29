@@ -34,7 +34,7 @@ function createLead(data) {
     data.last_name || '',            // C: last_name
     data.email || '',                // D: email
     data.phone || '',                // E: phone
-    data.stage || 'Warm Lead',        // F: stage
+    data.stage || 'New Lead',        // F: stage
     data.source || 'Manual',         // G: source
     data.fb_form_name || '',         // H: fb_form_name
     data.fb_ad_id || '',             // I: fb_ad_id

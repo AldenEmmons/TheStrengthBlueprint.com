@@ -507,7 +507,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
-  var STAGES = ['New Lead','Warm Lead','Hot Lead','Client','Lost'];
+  var STAGES = ['Warm Lead','Hot Lead','Client','Lost'];
   var allLeads = [];
   var currentLeadId = null;
   var userEmail = '<?= userEmail ?>';
@@ -566,7 +566,9 @@
       col.className = 'column col-' + stage;
       col.dataset.stage = stage;
 
-      var stageLeads = active.filter(function(l) { return l.stage === stage; });
+      var stageLeads = active.filter(function(l) {
+        return l.stage === stage || (stage === 'Warm Lead' && l.stage === 'New Lead');
+      });
 
       col.innerHTML =
         '<div class="column-header">' +
@@ -623,7 +625,10 @@
         (lead.email ? escHtml(lead.email) + '<br>' : '') +
         (lead.phone ? escHtml(lead.phone) : '') +
       '</div>' +
-      (tags ? '<div class="card-tags">' + tags + '</div>' : '');
+      (tags ? '<div class="card-tags">' + tags + '</div>' : '') +
+      (lead.stage === 'Warm Lead'
+        ? '<button class="btn btn-gold btn-sm send-session-btn" style="margin-top:10px;width:100%;" data-lead-id="' + lead.lead_id + '">Send Session Link</button>'
+        : '');
 
     card.addEventListener('click', function() { openPanel(lead.lead_id); });
 
@@ -850,6 +855,28 @@
       .withFailureHandler(function(err) { showToast('Error: ' + err.message); })
       .createNote(currentLeadId, 'Note', text, userEmail);
   }
+
+  // ── Send Strategy Session Link ─────────────────────
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('.send-session-btn');
+    if (!btn) return;
+    e.stopPropagation();
+    var leadId = btn.dataset.leadId;
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    google.script.run
+      .withSuccessHandler(function() {
+        btn.textContent = 'Sent ✓';
+        btn.style.background = '#38a169';
+        btn.style.color = '#fff';
+      })
+      .withFailureHandler(function(err) {
+        btn.disabled = false;
+        btn.textContent = 'Send Session Link';
+        alert('Could not send: ' + (err.message || err));
+      })
+      .sendStrategySessionLink(leadId);
+  });
 
   // ── Send Plan ──────────────────────────────────────
   function sendPlan() {

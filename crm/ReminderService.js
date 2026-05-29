@@ -24,7 +24,7 @@ function checkAndSendReminders() {
 function getOverdueLeads() {
   var leads = getAllLeads();
   var today = todayMidnight();
-  var activeStages = ['Warm Lead', 'Hot Lead'];
+  var activeStages = ['New Lead', 'Contacted', 'Assessment Booked'];
 
   return leads.filter(function(lead) {
     if (!lead.next_followup) return false;

@@ -111,7 +111,7 @@ function onFormSubmitHandler(e) {
 
     leads.appendRow([
       leadId, firstName, lastName, email, '',
-      'New Lead', source, '', '', '',
+      'Warm Lead', source, '', '', '',
       now, now, '', '', '',
       painArea, goalFull, 1, ''
     ]);

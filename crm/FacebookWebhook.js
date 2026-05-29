@@ -108,7 +108,7 @@ function mapFacebookFieldsToLead(graphResponse, fbMeta) {
     pain_area:     mapped.pain_area || mapped.pain_point || '',
     goal:          mapped.goal || mapped.goals || '',
     source:        'Facebook Lead Ad',
-    stage:         'Warm Lead',
+    stage:         'New Lead',
     fb_lead_id:    fbMeta.fb_lead_id || '',
     fb_ad_id:      fbMeta.fb_ad_id || '',
     fb_form_name:  fbMeta.fb_form_name || ''
@@ -139,7 +139,7 @@ function processZapierPayload(data) {
     pain_area:    data.pain_area || '',
     goal:         data.goal || '',
     source:       'Facebook Lead Ad',
-    stage:        'Warm Lead',
+    stage:        'New Lead',
     fb_lead_id:   fbLeadId,
     fb_ad_id:     data.ad_id || '',
     fb_form_name: data.form_name || ''

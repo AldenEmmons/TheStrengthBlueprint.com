@@ -5,6 +5,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Strength Blueprint | Evidence-Based Strength Coaching</title>
+  <link rel="preload" as="image" href="images/hero.jpg" media="(min-width: 901px)">
+  <link rel="preload" as="image" href="images/hero-mobile.jpg" media="(max-width: 900px)">
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -82,7 +84,8 @@
     }
     .hero-bg {
       position: absolute; inset: 0;
-      background-image: url('images/002.jpg');
+      background-color: #0b0f17;
+      background-image: url('images/hero.jpg');
       background-size: cover; background-position: 70% 15%;
       filter: grayscale(100%) brightness(0.82) contrast(1.05);
       transform: scale(1.04); z-index: 0;
@@ -195,7 +198,7 @@
       header { padding: 0 24px; }
       nav a:not(.header-cta) { display: none; }
       .hero { padding: 60px 24px 48px; }
-      .hero-bg { background-position: 65% 15%; }
+      .hero-bg { background-image: url('images/hero-mobile.jpg'); background-position: 65% 15%; }
       .method-section { grid-template-columns: 1fr; padding: 70px 24px; }
       .method-photo { min-height: 300px; }
       .for-section { display: block; }

@@ -1,0 +1,80 @@
+<article class="exercise" style="font-family: 'DM Sans', sans-serif;">
+  <p style="text-transform: uppercase; letter-spacing: 2px; font-size: 0.75rem; color: var(--gold);">
+    {{ exercise.category }}{% if exercise.movementPattern %} &middot; {{ exercise.movementPattern }}{% endif %}
+  </p>
+  <h1 style="font-family: 'Bebas Neue', sans-serif; letter-spacing: 1px; font-size: 2.4rem; margin: 8px 0 24px;">
+    {{ exercise.name }}
+  </h1>
+
+  {% if exercise.videoUrl %}
+  <div style="position: relative; padding-top: 56.25%; background: var(--mid); margin-bottom: 32px;">
+    <iframe src="{{ exercise.videoUrl }}"
+      style="position: absolute; top:0; left:0; width:100%; height:100%; border:0;"
+      allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+  </div>
+  {% endif %}
+
+  <section style="margin-bottom: 24px;">
+    <h2 style="font-size: 1rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Setup</h2>
+    <p>{{ exercise.setup }}</p>
+  </section>
+
+  <section style="margin-bottom: 24px;">
+    <h2 style="font-size: 1rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Execution</h2>
+    <p>{{ exercise.execution }}</p>
+  </section>
+
+  {% if exercise.cues and exercise.cues.length %}
+  <section style="margin-bottom: 24px;">
+    <h2 style="font-size: 1rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Coaching Cues</h2>
+    <ul>
+      {% for cue in exercise.cues %}<li>{{ cue }}</li>{% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {% if exercise.commonMistakes and exercise.commonMistakes.length %}
+  <section style="margin-bottom: 24px;">
+    <h2 style="font-size: 1rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Common Mistakes</h2>
+    <ul>
+      {% for mistake in exercise.commonMistakes %}<li>{{ mistake }}</li>{% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <section style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+    {% if exercise.regression %}
+    <div>
+      <h2 style="font-size: 1rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Regression</h2>
+      <p>{{ exercise.regression }}</p>
+    </div>
+    {% endif %}
+    {% if exercise.progression %}
+    <div>
+      <h2 style="font-size: 1rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Progression</h2>
+      <p>{{ exercise.progression }}</p>
+    </div>
+    {% endif %}
+  </section>
+
+  {% if exercise.approvedSubstitutions and exercise.approvedSubstitutions.length %}
+  <section style="margin-bottom: 24px;">
+    <h2 style="font-size: 1rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Approved Substitutions</h2>
+    <p>{{ exercise.approvedSubstitutions | join(', ') }}</p>
+  </section>
+  {% endif %}
+
+  {% if exercise.contraindications %}
+  <section style="margin-bottom: 24px;">
+    <h2 style="font-size: 1rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Coaching Notes</h2>
+    <p>{{ exercise.contraindications }}</p>
+  </section>
+  {% endif %}
+
+  <section style="margin-top: 40px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.08); font-size: 0.75rem; color: rgba(255,255,255,0.4);">
+    <p>Exercise ID: {{ exercise.id }}</p>
+    {% if exercise.equipment and exercise.equipment.length %}<p>Equipment: {{ exercise.equipment | join(', ') }}</p>{% endif %}
+    {% if exercise.difficulty %}<p>Difficulty: {{ exercise.difficulty }}</p>{% endif %}
+    {% if exercise.tags and exercise.tags.length %}<p>Tags: {{ exercise.tags | join(', ') }}</p>{% endif %}
+  </section>
+</article>

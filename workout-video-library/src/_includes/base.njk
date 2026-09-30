@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }} | The Strength Blueprint</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #c9a84c;
+      --black: #080c14;
+      --dark: #0d1220;
+      --mid: #111828;
+      --white: #ffffff;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--black); color: var(--white); line-height: 1.6; }
+    header { padding: 24px 32px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 3px; color: var(--white); text-decoration: none; }
+    .logo em { color: var(--gold); font-style: normal; }
+    main { max-width: 760px; margin: 0 auto; padding: 40px 24px 80px; }
+    footer { text-align: center; padding: 32px; color: rgba(255,255,255,0.4); font-size: 0.8rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="/">THE STRENGTH <em>BLUEPRINT</em></a>
+  </header>
+  <main>
+    {{ content | safe }}
+  </main>
+  <footer>&copy; The Strength Blueprint — Private Exercise Library</footer>
+</body>
+</html>

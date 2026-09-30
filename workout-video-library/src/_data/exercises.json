@@ -1,0 +1,91 @@
+[
+  {
+    "id": "EX-0001",
+    "slug": "romanian-deadlift",
+    "name": "Romanian Deadlift",
+    "videoUrl": "https://player.vimeo.com/video/000000001",
+    "thumbnail": "",
+    "category": "Lower Body",
+    "movementPattern": "Hip Hinge",
+    "primaryMuscles": ["Hamstrings", "Glutes"],
+    "secondaryMuscles": ["Erector Spinae", "Lats"],
+    "equipment": ["Barbell"],
+    "difficulty": "Intermediate",
+    "trainingPurpose": "Posterior chain strength and hip hinge patterning",
+    "setup": "Stand with feet hip-width apart, barbell against the thighs, soft bend in the knees.",
+    "execution": "Push the hips back while lowering the bar along the legs, keeping the spine neutral. Reverse the motion by driving the hips forward.",
+    "cues": [
+      "Push your hips back like closing a car door with them",
+      "Keep the bar close to your legs the whole way down",
+      "Stop when you feel a stretch in the hamstrings, not when your back rounds"
+    ],
+    "commonMistakes": [
+      "Rounding the lower back",
+      "Turning it into a squat by bending the knees too much"
+    ],
+    "regression": "Romanian Deadlift with dumbbells or a light kettlebell",
+    "progression": "Deficit Romanian Deadlift",
+    "approvedSubstitutions": ["Single-Leg Romanian Deadlift", "Good Morning"],
+    "contraindications": "Caution with acute lower back injury or disc issues; coach closely on spinal position.",
+    "tsbProgrammingNotes": "Primary posterior chain hinge for most lower-body days.",
+    "tags": ["hinge", "posterior-chain", "barbell"]
+  },
+  {
+    "id": "EX-0002",
+    "slug": "barbell-back-squat",
+    "name": "Barbell Back Squat",
+    "videoUrl": "https://player.vimeo.com/video/000000002",
+    "thumbnail": "",
+    "category": "Lower Body",
+    "movementPattern": "Squat",
+    "primaryMuscles": ["Quadriceps", "Glutes"],
+    "secondaryMuscles": ["Adductors", "Core"],
+    "equipment": ["Barbell", "Squat Rack"],
+    "difficulty": "Intermediate",
+    "trainingPurpose": "Foundational lower-body strength",
+    "setup": "Bar racked across the upper back, feet shoulder-width, braced core.",
+    "execution": "Sit the hips down and back while keeping the chest up, descend to at least parallel, then drive back up.",
+    "cues": [
+      "Screw your feet into the floor",
+      "Keep your chest tall throughout the descent"
+    ],
+    "commonMistakes": [
+      "Knees caving inward",
+      "Heels rising off the floor"
+    ],
+    "regression": "Goblet Squat",
+    "progression": "Front Squat",
+    "approvedSubstitutions": ["Leg Press", "Split Squat"],
+    "contraindications": "Modify depth or load with acute knee or hip pain.",
+    "tsbProgrammingNotes": "Primary squat pattern for most strength blocks.",
+    "tags": ["squat", "barbell", "compound"]
+  },
+  {
+    "id": "EX-0003",
+    "slug": "90-90-hip-lift",
+    "name": "90/90 Hip Lift",
+    "videoUrl": "https://player.vimeo.com/video/000000003",
+    "thumbnail": "",
+    "category": "Mobility",
+    "movementPattern": "Hip Extension",
+    "primaryMuscles": ["Glutes"],
+    "secondaryMuscles": ["Core"],
+    "equipment": ["None"],
+    "difficulty": "Beginner",
+    "trainingPurpose": "Glute activation and hip control warm-up",
+    "setup": "Lie on your back with shins resting on a bench at a 90/90 position.",
+    "execution": "Drive through the heels to lift the hips, squeezing the glutes at the top.",
+    "cues": [
+      "Squeeze the glutes, not the lower back"
+    ],
+    "commonMistakes": [
+      "Overarching the lower back to gain height"
+    ],
+    "regression": "Standard Glute Bridge",
+    "progression": "Single-Leg 90/90 Hip Lift",
+    "approvedSubstitutions": ["Glute Bridge"],
+    "contraindications": "None typical; low-risk warm-up movement.",
+    "tsbProgrammingNotes": "Common warm-up activation drill before lower-body sessions.",
+    "tags": ["warm-up", "glutes", "bodyweight"]
+  }
+]

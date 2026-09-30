@@ -1,0 +1,12 @@
+{
+  "name": "tsb-exercise-library",
+  "private": true,
+  "description": "Eleventy build for The Strength Blueprint private exercise video library",
+  "scripts": {
+    "build": "eleventy",
+    "serve": "eleventy --serve"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^2.0.1"
+  }
+}

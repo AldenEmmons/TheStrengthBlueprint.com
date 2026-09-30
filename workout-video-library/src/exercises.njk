@@ -1,0 +1,11 @@
+---
+pagination:
+  data: exercises
+  size: 1
+  alias: exercise
+permalink: "/exercises/{{ exercise.slug }}/index.html"
+layout: base.njk
+eleventyComputed:
+  title: "{{ exercise.name }}"
+---
+{% include "exercise.njk" %}
